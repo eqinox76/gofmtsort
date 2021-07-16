@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 
 	"golang.org/x/sync/errgroup"
 )
@@ -34,7 +35,12 @@ func main() {
 				return err
 			}
 			if *write {
-				return fmt.Errorf("not implemented")
+				w, err := os.Create(file)
+				if err != nil {
+					return err
+				}
+				_, err = w.WriteString(ast)
+				return err
 			} else {
 				fmt.Println(ast)
 			}
