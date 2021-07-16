@@ -23,6 +23,8 @@ func Sort(source []byte) (string, error) {
 
 	sort.SliceStable(root.Decls, sortDecl(root.Decls))
 
+	alignWhiteSpace(root.Decls)
+
 	var buf bytes.Buffer
 	err = decorator.Fprint(&buf, root)
 	if err != nil {
@@ -176,5 +178,32 @@ func sortDecl(a []dst.Decl) func(i, j int) bool {
 		}
 
 		return true
+	}
+}
+
+// when sorting var and const declarations we may create too much new whitespace
+func alignWhiteSpace(data []dst.Decl) {
+	if len(data) <= 1 {
+		return
+	}
+
+	last := 0
+	i := 1
+	for {
+		if i == len(data) {
+			break
+		}
+
+		lastType, lastOk := data[last].(*dst.GenDecl)
+		iType, iOk := data[i].(*dst.GenDecl)
+		if lastOk && iOk {
+			if lastType.Tok == iType.Tok {
+				lastType.Decs.After = dst.NewLine
+				iType.Decs.Before = dst.NewLine
+			}
+		}
+
+		last++
+		i++
 	}
 }
