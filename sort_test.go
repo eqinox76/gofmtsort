@@ -58,7 +58,7 @@ func TestSortOther(t *testing.T) {
 	pos := []int{}
 	for _, s := range []string{
 		"time", "pi", "result",
-		"Test()",
+		"Other", "debug", "Test()",
 	} {
 		pos = append(pos, strings.Index(result, s))
 	}

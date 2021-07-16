@@ -51,7 +51,7 @@ func funcName(f *dst.FuncDecl) string {
 
 func genName(g *dst.GenDecl) string {
 	switch g.Tok {
-	case token.CONST:
+	case token.CONST, token.VAR:
 		spec, ok := g.Specs[0].(*dst.ValueSpec)
 		if !ok {
 			log.Print("genName", g.Specs[0])
@@ -66,7 +66,7 @@ func genName(g *dst.GenDecl) string {
 		}
 		return spec.Name.Name
 	default:
-		log.Print("genName", g.Tok, "not supported")
+		log.Print("genName ", g.Tok, " not supported")
 		return ""
 	}
 }
